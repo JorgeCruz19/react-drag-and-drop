@@ -1,6 +1,7 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import getAllCourses from "./services/getAllCourses";
 
 const initialTasks = [
 	{
@@ -33,6 +34,16 @@ function App() {
 	const [tasks, setTasks] = useState(initialTasks);
 	const [id, setId] = useState("");
 	const [course, setCourses] = useState("");
+	const [isLoading, setIsLoading] = useState(true);
+
+
+	useEffect(() =>{
+		getAllCourses();
+		setIsLoading(false)
+	},[])
+
+
+
 
 	const handleChangeCourse = (e) => {
 		setCourses(e.target.value);
@@ -46,7 +57,10 @@ function App() {
 		if (course == "" || id == "") {
 			alert("Favor ingresar datos requeridos");
 		}
-		setTasks.push(...items, { id: id, text: course });
+		let newTasks = [...tasks, { id: id, text: course }]
+		setTasks(newTasks)
+		setId("")
+		setCourses("")
 	};
 	return (
 		<main className="app">
